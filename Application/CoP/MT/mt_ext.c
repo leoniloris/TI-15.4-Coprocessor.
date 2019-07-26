@@ -288,6 +288,17 @@ uint8_t MtExt_sendMessage(Mt_mpb_t *pMpb)
         /* Not enough memory to store fragment(s) */
         abortFragMsg(MTRPC_EXT_NOMEMORY);
     }
+    for (uint8_t block_number = 0; block_number < blocks; block_number++) {
+        Mt_mpb_t ack_data = {
+             .length=1,
+             .cmd0=0xc2,
+             .cmd1=0x85,
+             .verid=0x18,
+             .block=block_number,
+             .pData=(uint8_t[]){0},
+        };
+        processAck(&ack_data);
+    }
 
     /* Report dropped message */
     return(err);
